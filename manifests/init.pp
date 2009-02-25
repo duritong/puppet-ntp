@@ -32,7 +32,7 @@ class ntp {
     }    
 
     if $selinux {
-        //include ntp::selinux
+        #include ntp::selinux
     }
 
     case $virtual {
