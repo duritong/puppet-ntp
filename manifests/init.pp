@@ -31,10 +31,6 @@ class ntp {
         default: { fail("no classes for this kernel yet defined!") }
     }    
 
-    if $selinux {
-        #include ntp::selinux
-    }
-
     case $virtual {
         'xenu': { include ntp::xenu }
     }
