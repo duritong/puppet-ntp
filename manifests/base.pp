@@ -29,7 +29,7 @@ class ntp::base {
     if $use_munin {
         # various files and directories used by this module
       file{'/var/lib/puppet/modules/ntp/munin_plugin':
-      source => "puppet://$server/ntp/ntp_",
+      source => "puppet://$server/modules/ntp/ntp_",
       mode => 0755, owner => root, group => 0;
       }
 
