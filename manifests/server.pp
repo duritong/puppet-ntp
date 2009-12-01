@@ -35,7 +35,8 @@ class ntp::server {
     include nagios::service::ntp
   }
 
-  if $ntp_servers {
+  if $use_shorewall {
+    include shorewall::rules::ntp::client
     include shorewall::rules::ntp::server
   }
 }
