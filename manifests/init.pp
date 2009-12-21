@@ -14,8 +14,6 @@
 # the Free Software Foundation.
 #
 
-modules_dir { "ntp": }
-	
 class ntp {
     case $kernel {
         linux: {
