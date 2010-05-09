@@ -1,3 +1,4 @@
 class ntp::modules_dir {
-  modules_dir { "ntp": }
+  include common::moduledir
+  module_dir { "ntp": }
 }
