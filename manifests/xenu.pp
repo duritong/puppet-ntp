@@ -2,9 +2,6 @@
 class ntp::xenu {
   case $operatingsystem {
     debian,ubuntu: {
-      sysctl::value{'xen.independent_wallclock':
-        value => 1,
-      }
       exec{'echo "jiffies"> /sys/devices/system/clocksource/clocksource0/current_clocksource':
         unless => 'grep -q jiffies /sys/devices/system/clocksource/clocksource0/current_clocksource',
       }
