@@ -34,7 +34,8 @@ class ntp::base {
       mode => 0755, owner => root, group => 0;
     }
 
-    $ntps = gsub(split($configured_ntp_servers, " "), "(.+)", "ntp_\\1")
+    if (!$configured_ntp_servers) { $configured_ntp_servers = '' }
+    $ntps = regsubst(split($configured_ntp_servers, " "), "(.+)", "ntp_\\1")
 
     munin::plugin { $ntps:
       ensure => "munin_plugin",
