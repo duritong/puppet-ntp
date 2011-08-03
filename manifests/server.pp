@@ -7,12 +7,12 @@ class ntp::server($upstream_servers) {
     "server_${fqdn}":
       target  => '/etc/ntp.client.conf',
       content => "server ${fqdn} iburst\n",
-      tag => 'ntp',
+      tag => 'ntp';
     # export this server for our other servers
     "peer_${fqdn}":
       target  => '/etc/ntp.server.conf',
       content => "peer ${fqdn} iburst\nrestrict ${fqdn} nomodify notrap\n",
-      tag => 'ntp',
+      tag => 'ntp';
   }
   concat{'/etc/ntp.server.conf':
     notify => Service['ntpd'],
