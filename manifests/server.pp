@@ -1,6 +1,6 @@
 # this is a server, connect to the specified upstreams
 class ntp::server($upstream_servers) {
-  ntp::upstream_server {$ntp::servers::upstream_servers : }
+  ntp::upstream_server {$ntp::server::upstream_servers : }
 
   # export this server for our own clients
   @@concat::fragment{
