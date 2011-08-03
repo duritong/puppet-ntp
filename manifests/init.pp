@@ -15,17 +15,12 @@
 #
 
 class ntp {
-  case $kernel {
-    linux: {
-      case $operatingsystem {
-        debian: { include ntp::debian }
-        gentoo: { include ntp::gentoo }
-        default: { include ntp::linux }
-      }
-    }
+  case $operatingsystem {
+    debian: { include ntp::debian }
+    gentoo: { include ntp::gentoo }
     openbsd: { include ntp::openbsd }
-    default: { fail("no classes for this kernel yet defined!") }
-  }    
+    default: { include ntp::base }
+  }
 
   case $virtual {
     'xenu': { include ntp::xenu }
