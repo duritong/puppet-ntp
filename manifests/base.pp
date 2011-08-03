@@ -26,7 +26,4 @@ class ntp::base {
       }
     }
   }
-
-  # collect all our configs
-  Concat::Fragment <<| tag == 'ntp' |>>
 }
