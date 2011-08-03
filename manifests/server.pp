@@ -22,6 +22,11 @@ class ntp::server($upstream_servers) {
     owner => root, group => 0, mode => 0644;
   }
 
+  concat::fragment{"ntp_server_init_${fqdn}":
+    target => '/etc/ntp.server.conf',
+    content => "peer ${fqdn} iburst\nrestrict ${fqdn} nomodify notrap",
+    order => 5,
+  }
   if hiera('use_nagios',false) {
     include nagios::service::ntp
   }
