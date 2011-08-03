@@ -1,42 +1,32 @@
 # this is a server, connect to the specified upstreams
-class ntp::server {
-  include ntp::modules_dir
-  info ( "${fqdn} will act as ntp server using ${ntp_servers} as upstream" )
-  ntp::upstream_server { $ntp_servers: }
-    # export this server for our own clients
-  @@concatenated_file_part {
+class ntp::server($upstream_servers) {
+  ntp::upstream_server {$ntp::servers::upstream_servers : }
+
+  # export this server for our own clients
+  @@concat::fragment{
     "server_${fqdn}":
-      dir => "/var/lib/puppet/modules/ntp/ntp.client.d",
+      target  => '/etc/ntp.client.conf',
       content => "server ${fqdn} iburst\n",
       tag => 'ntp',
-      ## TODO: activate this dependency when the bug is fixed
-      #before => File["/etc/ntp.client.conf"]
-      ;
     # export this server for our other servers
     "peer_${fqdn}":
-      dir => "/var/lib/puppet/modules/ntp/ntp.server.d",
+      target  => '/etc/ntp.server.conf',
       content => "peer ${fqdn} iburst\nrestrict ${fqdn} nomodify notrap\n",
       tag => 'ntp',
-      ## TODO: activate this dependency when the bug is fixed
-      #before => File["/etc/ntp.server.conf"]
-      ;
   }
-  concatenated_file {"/etc/ntp.server.conf":
-    dir => "/var/lib/puppet/modules/ntp/ntp.server.d",
+  concat{'/etc/ntp.server.conf':
+    notify => Service['ntpd'],
   }
-  file { "/var/lib/puppet/modules/ntp/ntp.client.d": ensure => directory, }
-  # provide dummy dependency for collected files
-  exec { "concat_/var/lib/puppet/modules/ntp/ntp.client.d":
-    command => "true",
-    refreshonly => true,
+  file{'/etc/ntp.client.conf':
+    content => "\n",
+    owner => root, group => 0, mode => 0644;
   }
-  config_file { "/etc/ntp.client.conf": content => "\n", }
 
-  if $use_nagios {
+  if hiera('use_nagios',false) {
     include nagios::service::ntp
   }
 
-  if $use_shorewall {
+  if hiera('use_shorewall',false) {
     include shorewall::rules::ntp::client
     include shorewall::rules::ntp::server
   }

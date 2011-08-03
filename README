@@ -11,10 +11,10 @@ Refer to http://www.eecis.udel.edu/~mills/ntp/html/notes.html for details
 pertaining to a efficient and robust NTP Subnet implementation.
 
 The upstream NTP servers are set by specifying them in an array called
-$ntp_servers. It is recommended to use a different set of upstreams for each
-"server". Are no upstreams specified, the Pool is used.
+ntp_servers in hiera. It is recommended to use a different set of upstreams for
+each "server". Are no upstreams specified, the Pool is used.
 
-The stratum of the local clock is set via the $ntp_local_stratum variable, which
-is 13 by default. One Server should have this set to a lower stratum to provide
-a stable fallback in case of catastropic connection loss.
+The stratum of the local clock is set via the ntp_local_stratum variable in
+hiera, which is 13 by default. One Server should have this set to a lower
+stratum to provide a stable fallback in case of catastropic connection loss.
 

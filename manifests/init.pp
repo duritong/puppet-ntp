@@ -15,19 +15,23 @@
 #
 
 class ntp {
-    case $kernel {
-        linux: {
-            case $operatingsystem {
-                debian: { include ntp::debian }
-                gentoo: { include ntp::gentoo }
-                default: { include ntp::linux }
-            }
-        }
-        openbsd: { include ntp::openbsd }
-        default: { fail("no classes for this kernel yet defined!") }
-    }    
-
-    case $virtual {
-        'xenu': { include ntp::xenu }
+  case $kernel {
+    linux: {
+      case $operatingsystem {
+        debian: { include ntp::debian }
+        gentoo: { include ntp::gentoo }
+        default: { include ntp::linux }
+      }
     }
+    openbsd: { include ntp::openbsd }
+    default: { fail("no classes for this kernel yet defined!") }
+  }    
+
+  case $virtual {
+    'xenu': { include ntp::xenu }
+  }
+
+  if hiera('use_munin',false) {
+    include ntp::munin
+  }
 }

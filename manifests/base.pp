@@ -1,52 +1,32 @@
 class ntp::base {
-  include ntp::modules_dir
-
-  package { ntp:
+  package {'ntp':
     ensure => installed,
-    before => File["/etc/ntp.conf"],
   }
 
-  file {"/var/lib/puppet/modules/ntp":
-    ensure => directory,
-    force => true,
-    mode => 0755, owner => root, group => 0;
-  }
+  $local_stratum = hiera('ntp_local_stratum',13)
 
-  $local_stratum = $ntp_local_stratum ? {
-    '' => 13,
-    default => $ntp_local_stratum,
-  }
-
-  config_file { "/etc/ntp.conf":
+  file { "/etc/ntp.conf":
     content => template("ntp/ntp.conf"),
-    require => Package[ntp],
+    require => Package['ntp'],
+    notify => Service['ntpd'],
+    owner => root, group => 0, mode => 0644;
   }
 
-  service{ntpd:
+  service{'ntpd':
+    enable => true,
     ensure => running,
-    subscribe => [ File["/etc/ntp.conf"], File["/etc/ntp.client.conf"], File["/etc/ntp.server.conf"] ],
   }
 
-  if $use_munin {
-    # various files and directories used by this module
-    file{'/var/lib/puppet/modules/ntp/munin_plugin':
-      source => "puppet:///modules/ntp/ntp_",
-      mode => 0755, owner => root, group => 0;
-    }
-
-    if (!$configured_ntp_servers) { $configured_ntp_servers = '' }
-    $ntps = regsubst(split($configured_ntp_servers, " "), "(.+)", "ntp_\\1")
-
-    munin::plugin { $ntps:
-      ensure => "munin_plugin",
-      script_path_in => '/var/lib/puppet/modules/ntp'
-    }
-  }
+  $ntp_servers = hiera('ntp_servers','')
   case $ntp_servers {
     '': { include ntp::client }
-    default: { include ntp::server }
+    default: {
+      class{'ntp::server':
+        upstream_servers => $ntp_servers,
+      }
+    }
   }
 
   # collect all our configs
-  Concatenated_file_part <<| tag == 'ntp' |>>
+  Concat::Fragment <<| tag == 'ntp' |>>
 }
