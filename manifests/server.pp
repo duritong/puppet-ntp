@@ -24,7 +24,7 @@ class ntp::server($upstream_servers) {
 
   concat::fragment{"ntp_server_init_${fqdn}":
     target => '/etc/ntp.server.conf',
-    content => "peer ${fqdn} iburst\nrestrict ${fqdn} nomodify notrap",
+    content => "peer ${fqdn} iburst\nrestrict ${fqdn} nomodify notrap\n",
     order => '05',
   }
   if hiera('use_nagios',false) {
