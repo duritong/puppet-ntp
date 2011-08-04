@@ -7,7 +7,7 @@ class ntp::server($upstream_servers) {
     "server_${fqdn}":
       target  => '/etc/ntp.client.conf',
       content => "server ${fqdn} iburst\n",
-      tag => 'ntp';
+      tag => 'ntp-client';
     # export this server for our other servers
     "peer_${fqdn}":
       target  => '/etc/ntp.server.conf',

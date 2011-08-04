@@ -3,7 +3,7 @@ class ntp::client {
     notify => Service['ntpd'],
   }
   # collect all our configs
-  Concat::Fragment <<| tag == 'ntp' |>>
+  Concat::Fragment <<| tag == 'ntp-client' |>>
 
   file{'/etc/ntp.server.conf':
     content => "\n",
