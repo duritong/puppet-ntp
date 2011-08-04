@@ -6,7 +6,7 @@ class ntp::client {
   Concat::Fragment <<| tag == 'ntp' |>>
 
   file{'/etc/ntp.server.conf':
-    content => "\n"
+    content => "\n",
     owner => root, group => 0, mode => 0644;
   }
 
