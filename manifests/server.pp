@@ -11,8 +11,9 @@ class ntp::server($upstream_servers) {
     # export this server for our other servers
     "peer_${fqdn}":
       target  => '/etc/ntp.server.conf',
+      order => '05',
       content => "peer ${fqdn} iburst\nrestrict ${fqdn} nomodify notrap\n",
-      tag => 'ntp';
+      tag => 'ntp-server';
   }
   concat{'/etc/ntp.server.conf':
     notify => Service['ntpd'],
@@ -21,12 +22,8 @@ class ntp::server($upstream_servers) {
     content => "\n",
     owner => root, group => 0, mode => 0644;
   }
+  Concat::Fragment <<| tag == 'ntp-server' |>>
 
-  concat::fragment{"ntp_server_init_${fqdn}":
-    target => '/etc/ntp.server.conf',
-    content => "peer ${fqdn} iburst\nrestrict ${fqdn} nomodify notrap\n",
-    order => '05',
-  }
   if hiera('use_nagios',false) {
     include nagios::service::ntp
   }
