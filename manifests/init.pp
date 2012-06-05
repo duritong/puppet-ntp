@@ -15,14 +15,14 @@
 #
 
 class ntp {
-  case $operatingsystem {
+  case $::operatingsystem {
     debian: { include ntp::debian }
     gentoo: { include ntp::gentoo }
     openbsd: { include ntp::openbsd }
     default: { include ntp::base }
   }
 
-  case $virtual {
+  case $::virtual {
     'xenu': { include ntp::xenu }
   }
 

@@ -1,5 +1,5 @@
 class ntp::debian inherits ntp::base {
-  case $lsbdistcodename {
+  case $::lsbdistcodename {
     'sarge': {
       Package[ntp]{
         name => 'ntp-server',

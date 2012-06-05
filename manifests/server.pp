@@ -4,15 +4,15 @@ class ntp::server($upstream_servers) {
 
   # export this server for our own clients
   @@concat::fragment{
-    "server_${fqdn}":
+    "server_${::fqdn}":
       target  => '/etc/ntp.client.conf',
-      content => "server ${fqdn} iburst\n",
+      content => "server ${::fqdn} iburst\n",
       tag => 'ntp-client';
     # export this server for our other servers
-    "peer_${fqdn}":
+    "peer_${::fqdn}":
       target  => '/etc/ntp.server.conf',
       order => '05',
-      content => "peer ${fqdn} iburst\nrestrict ${fqdn} nomodify notrap\n",
+      content => "peer ${::fqdn} iburst\nrestrict ${::fqdn} nomodify notrap\n",
       tag => 'ntp-server';
   }
   concat{'/etc/ntp.server.conf':

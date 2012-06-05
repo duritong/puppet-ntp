@@ -10,7 +10,7 @@ class ntp::client {
     owner => root, group => 0, mode => 0644;
   }
 
-  if $use_shorewall {
+  if hira('use_shorewall',false) {
     include shorewall::rules::ntp::client
   }
 }
