@@ -14,7 +14,9 @@
 # the Free Software Foundation.
 #
 
-class ntp {
+class ntp ( 
+  $manage_munin = false
+) {
   case $::operatingsystem {
     debian: { include ntp::debian }
     gentoo: { include ntp::gentoo }
@@ -26,7 +28,7 @@ class ntp {
     'xenu': { include ntp::xenu }
   }
 
-  if hiera('use_munin',false) {
+  if $manage_munin {
     include ntp::munin
   }
 }
