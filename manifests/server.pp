@@ -1,6 +1,10 @@
 # this is a server, connect to the specified upstreams
-class ntp::server($upstream_servers) {
-  ntp::upstream_server {$ntp::server::upstream_servers : }
+class ntp::server(
+  $upstream_servers,
+  $manage_shorewall = false,
+  $manage_nagios = false
+) {
+  ntp::upstream_server {$upstream_servers : }
 
   # export this server for our own clients
   @@concat::fragment{
@@ -24,11 +28,11 @@ class ntp::server($upstream_servers) {
   }
   Concat::Fragment <<| tag == 'ntp-server' |>>
 
-  if hiera('use_nagios',false) {
+  if $manage_nagios {
     include nagios::service::ntp
   }
 
-  if hiera('use_shorewall',false) {
+  if $manage_shorewall {
     include shorewall::rules::ntp::client
     include shorewall::rules::ntp::server
   }

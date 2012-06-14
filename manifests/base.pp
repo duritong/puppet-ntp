@@ -3,7 +3,6 @@ class ntp::base {
     ensure => installed,
   }
 
-  $local_stratum = hiera('ntp_local_stratum',13)
 
   file { "/etc/ntp.conf":
     content => template("ntp/ntp.conf"),
@@ -17,12 +16,15 @@ class ntp::base {
     ensure => running,
   }
 
-  $ntp_servers = hiera('ntp_servers','')
-  case $ntp_servers {
-    '': { include ntp::client }
+  case $ntp::servers {
+    '': {
+      class{'ntp::client':
+        manage_shorewall => $ntp::manage_shorewall
+      }
+    }
     default: {
       class{'ntp::server':
-        upstream_servers => $ntp_servers,
+        upstream_servers => $ntp::servers,
       }
     }
   }

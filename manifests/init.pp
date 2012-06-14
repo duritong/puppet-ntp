@@ -15,7 +15,9 @@
 #
 
 class ntp ( 
-  $manage_munin = false
+  $manage_munin = false,
+  $servers = '',
+  $local_stratum = 13
 ) {
   case $::operatingsystem {
     debian: { include ntp::debian }

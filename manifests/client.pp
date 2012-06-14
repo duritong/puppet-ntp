@@ -1,4 +1,6 @@
-class ntp::client {
+class ntp::client(
+  $manage_shorewall = false
+) {
   concat{'/etc/ntp.client.conf':
     notify => Service['ntpd'],
   }
@@ -10,7 +12,7 @@ class ntp::client {
     owner => root, group => 0, mode => 0644;
   }
 
-  if hiera('use_shorewall',false) {
+  if $manage_shorewall {
     include shorewall::rules::ntp::client
   }
 }
