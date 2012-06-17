@@ -19,12 +19,13 @@ class ntp::base {
   case $ntp::servers {
     '': {
       class{'ntp::client':
-        manage_shorewall => $ntp::manage_shorewall
+        manage_shorewall => $ntp::manage_shorewall,
       }
     }
     default: {
       class{'ntp::server':
         upstream_servers => $ntp::servers,
+        manage_nagios => $ntp::manage_nagios,
       }
     }
   }
