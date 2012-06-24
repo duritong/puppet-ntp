@@ -18,7 +18,7 @@ class ntp (
   $manage_munin = false,
   $manage_shorewall = false,
   $manage_nagios = false,
-  $servers = '',
+  $servers = false,
   $local_stratum = 13
 ) {
   case $::operatingsystem {

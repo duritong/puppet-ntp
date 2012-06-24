@@ -16,17 +16,14 @@ class ntp::base {
     ensure => running,
   }
 
-  case $ntp::servers {
-    '': {
-      class{'ntp::client':
-        manage_shorewall => $ntp::manage_shorewall,
-      }
+  if $ntp::servers {
+    class{'ntp::client':
+      manage_shorewall => $ntp::manage_shorewall,
     }
-    default: {
-      class{'ntp::server':
-        upstream_servers => $ntp::servers,
-        manage_nagios => $ntp::manage_nagios,
-      }
+  } else {
+    class{'ntp::server':
+      upstream_servers => $ntp::servers,
+      manage_nagios => $ntp::manage_nagios,
     }
   }
 }
