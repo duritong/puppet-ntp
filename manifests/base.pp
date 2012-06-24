@@ -17,13 +17,13 @@ class ntp::base {
   }
 
   if $ntp::servers {
-    class{'ntp::client':
-      manage_shorewall => $ntp::manage_shorewall,
-    }
-  } else {
     class{'ntp::server':
       upstream_servers => $ntp::servers,
       manage_nagios => $ntp::manage_nagios,
+      manage_shorewall => $ntp::manage_shorewall,
+    }
+  } else {
+    class{'ntp::client':
       manage_shorewall => $ntp::manage_shorewall,
     }
   }
