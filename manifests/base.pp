@@ -24,6 +24,7 @@ class ntp::base {
     class{'ntp::server':
       upstream_servers => $ntp::servers,
       manage_nagios => $ntp::manage_nagios,
+      manage_shorewall => $ntp::manage_shorewall,
     }
   }
 }

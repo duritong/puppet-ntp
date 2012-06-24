@@ -4,7 +4,7 @@ class ntp::server(
   $manage_shorewall = false,
   $manage_nagios = false
 ) {
-  ntp::upstream_server {$upstream_servers : }
+  ntp::upstream_server {$upstream_servers: }
 
   # export this server for our own clients
   @@concat::fragment{
