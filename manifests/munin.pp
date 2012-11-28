@@ -1,7 +1,6 @@
 class ntp::munin {
-  case $configured_ntp_servers { '',undef: { $configured_ntp_servers = '' } }
-  $ntps = regsubst(split($configured_ntp_servers, " "), "(.+)", "ntp_\\1")
-  
+  $ntps = regsubst(reject(split($::configured_ntp_servers, " "), '127\.127\.1\.0'),"(.+)", "ntp_\\1")
+
   munin::plugin::deploy{$ntps:
     source => 'ntp/munin/ntp_',
   }
