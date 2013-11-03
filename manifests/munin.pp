@@ -6,4 +6,7 @@ class ntp::munin {
     source  => 'ntp/munin/ntp_',
     seltype => 'munin_services_plugin_exec_t',
   }
+  munin::plugin{
+    'ntp_offset':
+  }
 }
