@@ -1,3 +1,4 @@
+# basic ntp stuff
 class ntp::base {
   package {'ntp':
     ensure => installed,
@@ -7,8 +8,10 @@ class ntp::base {
   file { "/etc/ntp.conf":
     content => template("ntp/ntp.conf"),
     require => Package['ntp'],
-    notify => Service['ntpd'],
-    owner => root, group => 0, mode => 0644;
+    notify  => Service['ntpd'],
+    owner   => root,
+    group   => 0,
+    mode    => '0644';
   }
 
   service{'ntpd':
@@ -19,7 +22,7 @@ class ntp::base {
   if $ntp::servers {
     class{'ntp::server':
       upstream_servers => $ntp::servers,
-      manage_nagios => $ntp::manage_nagios,
+      manage_nagios    => $ntp::manage_nagios,
       manage_shorewall => $ntp::manage_shorewall,
     }
   } else {

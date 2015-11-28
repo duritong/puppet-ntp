@@ -14,25 +14,27 @@
 # the Free Software Foundation.
 #
 
-class ntp ( 
-  $manage_munin = false,
+# manage ntp
+class ntp(
+  $manage_munin     = false,
   $manage_shorewall = false,
-  $manage_nagios = false,
-  $servers = false,
-  $local_stratum = 13
+  $manage_nagios    = false,
+  $servers          = false,
+  $local_stratum    = 13,
 ) {
   case $::operatingsystem {
-    debian: { include ntp::debian }
-    gentoo: { include ntp::gentoo }
-    openbsd: { include ntp::openbsd }
-    default: { include ntp::base }
+    'Debian': { include ::ntp::debian }
+    'Gentoo': { include ::ntp::gentoo }
+    'OpenBSD': { include ::ntp::openbsd }
+    default: { include ::ntp::base }
   }
 
   case $::virtual {
-    'xenu': { include ntp::xenu }
+    'xenu': { include ::ntp::xenu }
+    default: {}
   }
 
   if $manage_munin {
-    include ntp::munin
+    include ::ntp::munin
   }
 }

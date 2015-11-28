@@ -1,3 +1,4 @@
+# debian specific things
 class ntp::debian inherits ntp::base {
   case $::lsbdistcodename {
     'sarge': {
@@ -5,6 +6,7 @@ class ntp::debian inherits ntp::base {
         name => 'ntp-server',
       }
     }
+    default: {}
   }
   Service['ntpd']{
     name => 'ntp',
